@@ -1,5 +1,7 @@
-https://iacademy.oracle.com/ords/f?p=4000:4900:15970983789779::NO:::
-Source Code:
+https://iacademy.oracle.com/ords/f?p=4000:4900:5794628455151::NO:::
+
+Source code:
+
 prompt --application/set_environment
 set define off verify off feedback off
 whenever sqlerror exit sql.sqlcode rollback
@@ -29,7 +31,7 @@ prompt APPLICATION 1275 - PlasmaDonorApplication
 -- Application Export:
 --   Application:     1275
 --   Name:            PlasmaDonorApplication
---   Date and Time:   14:47 Tuesday May 31, 2022
+--   Date and Time:   17:09 Wednesday June 1, 2022
 --   Exported By:     IN_A441_SQL_S18
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -38,11 +40,11 @@ prompt APPLICATION 1275 - PlasmaDonorApplication
 --
 
 -- Application Statistics:
---   Pages:                      6
---     Items:                    9
---     Processes:                6
---     Regions:                  7
---     Buttons:                  5
+--   Pages:                      7
+--     Items:                   11
+--     Processes:                7
+--     Regions:                  8
+--     Buttons:                  6
 --   Shared Components:
 --     Logic:
 --     Navigation:
@@ -112,7 +114,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'PlasmaDonorApplication'
 ,p_last_updated_by=>'IN_A441_SQL_S18'
-,p_last_upd_yyyymmddhh24miss=>'20220531130836'
+,p_last_upd_yyyymmddhh24miss=>'20220601164829'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -157,6 +159,14 @@ wwv_flow_api.create_list_item(
 ,p_list_item_link_target=>'f?p=&APP_ID.:4:&SESSION.::&DEBUG.'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'4'
+);
+wwv_flow_api.create_list_item(
+ p_id=>wwv_flow_api.id(66896415957740843317)
+,p_list_item_display_sequence=>50
+,p_list_item_link_text=>'Email Notification'
+,p_list_item_link_target=>'f?p=&APP_ID.:5:&SESSION.::&DEBUG.'
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'5'
 );
 end;
 /
@@ -10645,6 +10655,97 @@ wwv_flow_api.create_jet_chart_axis(
 ,p_major_tick_rendered=>'on'
 ,p_minor_tick_rendered=>'off'
 ,p_tick_label_rendered=>'on'
+);
+end;
+/
+prompt --application/pages/page_00005
+begin
+wwv_flow_api.create_page(
+ p_id=>5
+,p_user_interface_id=>wwv_flow_api.id(66785974650602657293)
+,p_name=>'Email Notification'
+,p_step_title=>'Email Notification'
+,p_autocomplete_on_off=>'OFF'
+,p_page_template_options=>'#DEFAULT#'
+,p_last_updated_by=>'IN_A441_SQL_S18'
+,p_last_upd_yyyymmddhh24miss=>'20220601164829'
+);
+wwv_flow_api.create_page_plug(
+ p_id=>wwv_flow_api.id(66789711571173956813)
+,p_plug_name=>'New'
+,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
+,p_plug_template=>wwv_flow_api.id(66785895923557657224)
+,p_plug_display_sequence=>10
+,p_include_in_reg_disp_sel_yn=>'Y'
+,p_plug_display_point=>'BODY'
+,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
+,p_attribute_01=>'N'
+,p_attribute_02=>'HTML'
+);
+wwv_flow_api.create_page_button(
+ p_id=>wwv_flow_api.id(66789711820335956816)
+,p_button_sequence=>10
+,p_button_plug_id=>wwv_flow_api.id(66789711571173956813)
+,p_button_name=>'Send'
+,p_button_action=>'SUBMIT'
+,p_button_template_options=>'#DEFAULT#:t-Button--iconRight'
+,p_button_template_id=>wwv_flow_api.id(66785952216917657273)
+,p_button_image_alt=>'Send'
+,p_button_position=>'REGION_TEMPLATE_CREATE'
+);
+wwv_flow_api.create_page_item(
+ p_id=>wwv_flow_api.id(66789711615741956814)
+,p_name=>'RECIEVER_EMAIL'
+,p_item_sequence=>10
+,p_item_plug_id=>wwv_flow_api.id(66789711571173956813)
+,p_prompt=>'Sender Email'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_api.id(66785951024162657272)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_api.create_page_item(
+ p_id=>wwv_flow_api.id(66789712035228956818)
+,p_name=>'RBLOODGROUP'
+,p_item_sequence=>20
+,p_item_plug_id=>wwv_flow_api.id(66789711571173956813)
+,p_prompt=>'Receiver blood group'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_api.id(66785951024162657272)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_api.create_page_process(
+ p_id=>wwv_flow_api.id(66789711926972956817)
+,p_process_sequence=>10
+,p_process_point=>'AFTER_SUBMIT'
+,p_process_type=>'NATIVE_PLSQL'
+,p_process_name=>'Request Email'
+,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'declare',
+'sender_mail VARCHAR2(50);',
+'begin',
+'for c in (select EMAIL INTO sender_mail from PLASMADONORAPP WHERE INFECTED=''No'' AND BLOODGROUP=:RBLOODGROUP)',
+'loop',
+'apex_mail.send(',
+'    p_to => c.EMAIL,',
+'    p_from => :RECIEVER_EMAIL,',
+'    p_body => ''This email is to inform you that you are requested to donate blood'',',
+'    p_subj => ''Request for Plasma...!!!''',
+');',
+'END LOOP;',
+'END;'))
+,p_process_error_message=>'Email can''t be sent , Please try again'
+,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_process_success_message=>'Hurray ! Email sent...'
 );
 end;
 /
